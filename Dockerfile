@@ -51,6 +51,7 @@ ENV LANG=C.UTF-8
 # The MIT License (MIT)
 #
 # Copyright (c) 2015 Vlad
+# Copyright (c) 2017 DIKU
 ###
 RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz && \
     wget "https://www.archlinux.org/packages/extra/x86_64/mono/download/" -O "/tmp/mono.pkg.tar.xz" && \
