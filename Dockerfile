@@ -2,6 +2,8 @@ FROM dikunix/docker-gitlab-runner-alpine:latest
 
 MAINTAINER Oleks <oleks@oleks.info>
 
+USER root
+
 ###
 # Source: https://github.com/frol/docker-alpine-glibc
 RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" && \
@@ -47,3 +49,5 @@ RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz
     apk del .build-dependencies && \
     rm /tmp/*
 ###
+
+USER docker
