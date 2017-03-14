@@ -6,6 +6,11 @@ USER root
 
 ###
 # Source: https://github.com/frol/docker-alpine-glibc
+#
+# The MIT License (MIT)
+#
+# Copyright (c) 2015 Vlad
+###
 RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" && \
     ALPINE_GLIBC_PACKAGE_VERSION="2.25-r0" && \
     ALPINE_GLIBC_BASE_PACKAGE_FILENAME="glibc-$ALPINE_GLIBC_PACKAGE_VERSION.apk" && \
@@ -42,6 +47,11 @@ ENV LANG=C.UTF-8
 
 ###
 # Source: https://github.com/DIKUNIX/docker-alpine-mono
+#
+# The MIT License (MIT)
+#
+# Copyright (c) 2015 Vlad
+###
 RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz && \
     wget "https://www.archlinux.org/packages/extra/x86_64/mono/download/" -O "/tmp/mono.pkg.tar.xz" && \
     tar -xJf "/tmp/mono.pkg.tar.xz" && \
