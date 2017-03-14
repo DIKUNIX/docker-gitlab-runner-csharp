@@ -61,4 +61,12 @@ RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz
     rm /tmp/*
 ###
 
+# Install gtk-sharp similarly to mono:
+RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz && \
+    wget "https://www.archlinux.org/packages/extra/x86_64/gtk-sharp-2/download/" -O "/tmp/gtk.pkg.tar.xz" && \
+    tar -xJf "/tmp/gtk.pkg.tar.xz" -C / && \
+    cert-sync /etc/ssl/certs/ca-certificates.crt && \
+    apk del .build-dependencies && \
+    rm /tmp/*
+
 USER docker
