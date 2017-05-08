@@ -69,6 +69,6 @@ RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz
     apk del .build-dependencies && \
     rm /tmp/*
 
-RUN apk add --no-cache nano vim
+RUN apk add --no-cache nano vim man man-pages
 
 USER docker
