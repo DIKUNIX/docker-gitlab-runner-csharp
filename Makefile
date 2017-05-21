@@ -31,7 +31,7 @@
 .PHONY: build interact
 
 name:=$(shell basename $(CURDIR))
-version:=0.0.1
+version:=0.0.2
 tag:=$(name):v$(version)
 
 build: Dockerfile Makefile
