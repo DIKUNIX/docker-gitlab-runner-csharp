@@ -79,7 +79,7 @@ RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz
 
 # Install nuget similarly to mono, gtk-sharp, and monodevelop:
 RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz && \
-    wget "https://www.archlinux.org/packages/extra/x86_64/nuget/download/" -O "/tmp/gtk.pkg.tar.xz" && \
+    wget "https://www.archlinux.org/packages/extra/any/nuget/download/" -O "/tmp/gtk.pkg.tar.xz" && \
     tar -xJf "/tmp/gtk.pkg.tar.xz" -C / && \
     cert-sync /etc/ssl/certs/ca-certificates.crt && \
     apk del .build-dependencies && \
