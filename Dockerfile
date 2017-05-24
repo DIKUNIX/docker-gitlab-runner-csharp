@@ -54,33 +54,41 @@ ENV LANG=C.UTF-8
 # Copyright (c) 2017 DIKU
 ###
 RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz && \
-    wget "https://www.archlinux.org/packages/extra/x86_64/mono/download/" -O "/tmp/mono.pkg.tar.xz" && \
-    tar -xJf "/tmp/mono.pkg.tar.xz" -C / && \
+    wget "https://www.archlinux.org/packages/extra/x86_64/mono/download/" -O "/tmp/pkg.tar.xz" && \
+    tar -xJf "/tmp/pkg.tar.xz" -C / && \
     cert-sync /etc/ssl/certs/ca-certificates.crt && \
     apk del .build-dependencies && \
     rm /tmp/*
 ###
 
-# Install gtk-sharp similarly to mono:
+# Install gtk2 similarly:
 RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz && \
-    wget "https://www.archlinux.org/packages/extra/x86_64/gtk-sharp-2/download/" -O "/tmp/gtk.pkg.tar.xz" && \
-    tar -xJf "/tmp/gtk.pkg.tar.xz" -C / && \
+    wget "https://www.archlinux.org/packages/extra/x86_64/gtk2/download/" -O "/tmp/pkg.tar.xz" && \
+    tar -xJf "/tmp/pkg.tar.xz" -C / && \
     cert-sync /etc/ssl/certs/ca-certificates.crt && \
     apk del .build-dependencies && \
     rm /tmp/*
 
-# Install monodevelop similarly to mono and gtk-sharp:
+# Install gtk-sharp similarly:
 RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz && \
-    wget "https://www.archlinux.org/packages/extra/x86_64/monodevelop/download/" -O "/tmp/gtk.pkg.tar.xz" && \
-    tar -xJf "/tmp/gtk.pkg.tar.xz" -C / && \
+    wget "https://www.archlinux.org/packages/extra/x86_64/gtk-sharp-2/download/" -O "/tmp/pkg.tar.xz" && \
+    tar -xJf "/tmp/pkg.tar.xz" -C / && \
     cert-sync /etc/ssl/certs/ca-certificates.crt && \
     apk del .build-dependencies && \
     rm /tmp/*
 
-# Install nuget similarly to mono, gtk-sharp, and monodevelop:
+# Install monodevelop similarly:
 RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz && \
-    wget "https://www.archlinux.org/packages/extra/any/nuget/download/" -O "/tmp/gtk.pkg.tar.xz" && \
-    tar -xJf "/tmp/gtk.pkg.tar.xz" -C / && \
+    wget "https://www.archlinux.org/packages/extra/x86_64/monodevelop/download/" -O "/tmp/pkg.pkg.tar.xz" && \
+    tar -xJf "/tmp/pkg.tar.xz" -C / && \
+    cert-sync /etc/ssl/certs/ca-certificates.crt && \
+    apk del .build-dependencies && \
+    rm /tmp/*
+
+# Install nuget similarly:
+RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz && \
+    wget "https://www.archlinux.org/packages/extra/any/nuget/download/" -O "/tmp/pkg.tar.xz" && \
+    tar -xJf "/tmp/pkg.tar.xz" -C / && \
     cert-sync /etc/ssl/certs/ca-certificates.crt && \
     apk del .build-dependencies && \
     rm /tmp/*
