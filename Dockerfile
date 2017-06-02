@@ -69,7 +69,7 @@ RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz
     apk del .build-dependencies && \
     rm /tmp/*
 
-# Install gtk-sharp similarly:
+# Install gtk-sharp-2 similarly:
 RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz && \
     wget "https://www.archlinux.org/packages/extra/x86_64/gtk-sharp-2/download/" -O "/tmp/pkg.tar.xz" && \
     tar -xJf "/tmp/pkg.tar.xz" -C / && \
