@@ -77,6 +77,14 @@ RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz
     apk del .build-dependencies && \
     rm /tmp/*
 
+# Install gdk-pixbuf2 similarly:
+RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz && \
+    wget "https://www.archlinux.org/packages/extra/x86_64/gdk-pixbuf2/download/" -O "/tmp/pkg.tar.xz" && \
+    tar -xJf "/tmp/pkg.tar.xz" -C / && \
+    cert-sync /etc/ssl/certs/ca-certificates.crt && \
+    apk del .build-dependencies && \
+    rm /tmp/*
+
 # Install monodevelop similarly:
 RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz && \
     wget "https://www.archlinux.org/packages/extra/x86_64/monodevelop/download/" -O "/tmp/pkg.tar.xz" && \
