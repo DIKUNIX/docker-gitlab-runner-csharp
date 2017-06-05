@@ -19,6 +19,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
     gtk-sharp3 \
   && rm -rf /var/lib/apt/lists/*
 
+RUN nuget update -self
+
 RUN useradd --create-home --uid 1000 docker
 RUN chown -R docker:docker /home/docker
 USER docker
