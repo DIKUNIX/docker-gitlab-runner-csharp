@@ -1,106 +1,28 @@
-FROM dikunix/docker-gitlab-runner-alpine:latest
+FROM ruby:2.1
 
 MAINTAINER Oleks <oleks@oleks.info>
 
 USER root
 
-###
-# Source: https://github.com/frol/docker-alpine-glibc
-#
-# The MIT License (MIT)
-#
-# Copyright (c) 2015 Vlad
-###
-RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" && \
-    ALPINE_GLIBC_PACKAGE_VERSION="2.25-r0" && \
-    ALPINE_GLIBC_BASE_PACKAGE_FILENAME="glibc-$ALPINE_GLIBC_PACKAGE_VERSION.apk" && \
-    ALPINE_GLIBC_BIN_PACKAGE_FILENAME="glibc-bin-$ALPINE_GLIBC_PACKAGE_VERSION.apk" && \
-    ALPINE_GLIBC_I18N_PACKAGE_FILENAME="glibc-i18n-$ALPINE_GLIBC_PACKAGE_VERSION.apk" && \
-    apk add --no-cache --virtual=.build-dependencies wget ca-certificates && \
-    wget \
-        "https://raw.githubusercontent.com/andyshinn/alpine-pkg-glibc/master/sgerrand.rsa.pub" \
-        -O "/etc/apk/keys/sgerrand.rsa.pub" && \
-    wget \
-        "$ALPINE_GLIBC_BASE_URL/$ALPINE_GLIBC_PACKAGE_VERSION/$ALPINE_GLIBC_BASE_PACKAGE_FILENAME" \
-        "$ALPINE_GLIBC_BASE_URL/$ALPINE_GLIBC_PACKAGE_VERSION/$ALPINE_GLIBC_BIN_PACKAGE_FILENAME" \
-        "$ALPINE_GLIBC_BASE_URL/$ALPINE_GLIBC_PACKAGE_VERSION/$ALPINE_GLIBC_I18N_PACKAGE_FILENAME" && \
-    apk add --no-cache \
-        "$ALPINE_GLIBC_BASE_PACKAGE_FILENAME" \
-        "$ALPINE_GLIBC_BIN_PACKAGE_FILENAME" \
-        "$ALPINE_GLIBC_I18N_PACKAGE_FILENAME" && \
-    \
-    rm "/etc/apk/keys/sgerrand.rsa.pub" && \
-    /usr/glibc-compat/bin/localedef --force --inputfile POSIX --charmap UTF-8 C.UTF-8 || true && \
-    echo "export LANG=C.UTF-8" > /etc/profile.d/locale.sh && \
-    \
-    apk del glibc-i18n && \
-    \
-    rm "/root/.wget-hsts" && \
-    apk del .build-dependencies && \
-    rm \
-        "$ALPINE_GLIBC_BASE_PACKAGE_FILENAME" \
-        "$ALPINE_GLIBC_BIN_PACKAGE_FILENAME" \
-        "$ALPINE_GLIBC_I18N_PACKAGE_FILENAME"
+RUN perl -pi -e 's/jessie/testing/g' /etc/apt/sources.list
 
-ENV LANG=C.UTF-8
-###
+RUN DEBIAN_FRONTEND=noninteractive apt-get update \
+  && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y \
+  && DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y \
+  && rm -rf /var/lib/apt/lists/*
 
-###
-# Original Source: https://github.com/DIKUNIX/docker-alpine-mono
-#
-# The MIT License (MIT)
-#
-# Copyright (c) 2015 Vlad
-# Copyright (c) 2017 DIKU
-###
-RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz && \
-    wget "https://www.archlinux.org/packages/extra/x86_64/mono/download/" -O "/tmp/pkg.tar.xz" && \
-    tar -xJf "/tmp/pkg.tar.xz" -C / && \
-    cert-sync /etc/ssl/certs/ca-certificates.crt && \
-    apk del .build-dependencies && \
-    rm /tmp/*
-###
+RUN DEBIAN_FRONTEND=noninteractive apt-get update \
+  && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    monodevelop \
+    nuget \
+    libgtk-3-0 \
+    gtk-sharp3 \
+  && rm -rf /var/lib/apt/lists/*
 
-# Install gtk2 similarly:
-RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz && \
-    wget "https://www.archlinux.org/packages/extra/x86_64/gtk2/download/" -O "/tmp/pkg.tar.xz" && \
-    tar -xJf "/tmp/pkg.tar.xz" -C / && \
-    cert-sync /etc/ssl/certs/ca-certificates.crt && \
-    apk del .build-dependencies && \
-    rm /tmp/*
-
-# Install gtk-sharp-2 similarly:
-RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz && \
-    wget "https://www.archlinux.org/packages/extra/x86_64/gtk-sharp-2/download/" -O "/tmp/pkg.tar.xz" && \
-    tar -xJf "/tmp/pkg.tar.xz" -C / && \
-    cert-sync /etc/ssl/certs/ca-certificates.crt && \
-    apk del .build-dependencies && \
-    rm /tmp/*
-
-# Install gdk-pixbuf2 similarly:
-RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz && \
-    wget "https://www.archlinux.org/packages/extra/x86_64/gdk-pixbuf2/download/" -O "/tmp/pkg.tar.xz" && \
-    tar -xJf "/tmp/pkg.tar.xz" -C / && \
-    cert-sync /etc/ssl/certs/ca-certificates.crt && \
-    apk del .build-dependencies && \
-    rm /tmp/*
-
-# Install monodevelop similarly:
-RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz && \
-    wget "https://www.archlinux.org/packages/extra/x86_64/monodevelop/download/" -O "/tmp/pkg.tar.xz" && \
-    tar -xJf "/tmp/pkg.tar.xz" -C / && \
-    cert-sync /etc/ssl/certs/ca-certificates.crt && \
-    apk del .build-dependencies && \
-    rm /tmp/*
-
-# Install nuget similarly:
-RUN apk add --no-cache --virtual=.build-dependencies wget ca-certificates tar xz && \
-    wget "https://www.archlinux.org/packages/extra/any/nuget/download/" -O "/tmp/pkg.tar.xz" && \
-    tar -xJf "/tmp/pkg.tar.xz" -C / && \
-    cert-sync /etc/ssl/certs/ca-certificates.crt && \
-    apk del .build-dependencies && \
-    rm /tmp/*
-
-RUN apk add --no-cache nano vim man man-pages
-
+RUN useradd --create-home --uid 1000 docker
+RUN chown -R docker:docker /home/docker
 USER docker
+
+WORKDIR /home/docker/
+
+CMD ["irb"]
